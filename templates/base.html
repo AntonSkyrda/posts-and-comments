@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+  {% block header %}
+    {% include "includes/header.html" %}
+  {% endblock %}
+  <div class="container">
+    {% block content %}
+    {% endblock %}
+  
+    <div class="pagination">
+      {% block pagination %}
+        {% include "includes/pagination.html" %}
+      {% endblock %}
+    </div>
+  
+  </div>
+  {% block footer %}
+    {% include "includes/footer.html" %}
+  {% endblock %}
+</body>
+</html>
