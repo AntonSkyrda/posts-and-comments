@@ -10,6 +10,7 @@ python = "^3.11"
 Django = "^5.1.2"
 python-dotenv = "^1.0.1"
 django-simple-captcha = "^0.6.0"
+psycopg2-binary = "^2.9.10"
 
 
 [build-system]
