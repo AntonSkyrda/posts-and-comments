@@ -22,7 +22,11 @@
           <p>User: {{ user.get_username }}</p>
         </li>
       {% else %}
-        <li><a href="{% url 'login' %}?next={{ request.path }}">Log IN</a></li>
+        <li>
+          <a href="{% url 'login' %}?next={{ request.path }}">
+            <p>Log IN</p>
+          </a>
+        </li>
       {% endif %}
     </ul>
   </nav>

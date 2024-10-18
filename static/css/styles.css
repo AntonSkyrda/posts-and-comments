@@ -106,11 +106,20 @@ a {
     justify-content: space-around;
 }
 
-.logout-button {
-
-}
-
 .delete-btn {
     margin: 20px;
     background-color: red;
+}
+
+.edition {
+    margin: auto;
+    justify-content: space-between;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.editing-group {
+    display: flex;
+    align-items: center;
 }
