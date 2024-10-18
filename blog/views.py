@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Prefetch
 from django.urls import reverse_lazy
@@ -111,3 +112,39 @@ class BlogUserCreateView(CreateView):
     form_class = BlogUserCreateForm
     template_name = "blog/user_form.html"
     success_url = reverse_lazy("blog:index")
+
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user != post.user:
+        return HttpResponseForbidden("У вас немає прав для видалення цього поста.")
+
+    if request.method == "POST":
+        post.delete()
+        return redirect("blog:index")
+    return render(request, "blog/delete_post.html", {"post": post})
+
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user != comment.user:
+        return HttpResponseForbidden("У вас немає прав для видалення цього коментаря.")
+
+    if request.method == "POST":
+        comment.delete()
+        return redirect("blog:index")
+    return render(request, "blog/delete_comment.html", {"comment": comment})
+
+
+@login_required
+def delete_reply(request, reply_id):
+    reply = get_object_or_404(Comment, id=reply_id)
+    if request.user != reply.user:
+        return HttpResponseForbidden("У вас немає прав для видалення цього коментаря.")
+
+    if request.method == "POST":
+        reply.delete()
+        return redirect("blog:index")
+    return render(request, "blog/delete_comment.html", {"reply": reply})

@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background-color: grey;
+    background-color: #fafafa;
 }
 
 * {
@@ -108,4 +108,9 @@ a {
 
 .logout-button {
 
+}
+
+.delete-btn {
+    margin: 20px;
+    background-color: red;
 }

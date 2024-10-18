@@ -5,66 +5,67 @@
     {% for post in posts %}
       <div class="message">
         <div class="post-info">
-          <p class="user-name">
-            {{ post.user.username }}
-          </p>
-          <p class="date-info">
-            {{ post.formatted_date }}
-          </p>
+          <p class="user-name">{{ post.user.username }}</p>
+          <p class="date-info">{{ post.formatted_date }}</p>
         </div>
-        <p class="text-area">
-          {{ post.text }}
-        </p>
+        <p class="text-area">{{ post.text }}</p>
         <p class="comment-link">
           <a href="{% url "blog:add_comment" post_id=post.id %}">Comment</a>
         </p>
+
+        {% if request.user == post.user %}
+          <form method="post" action="{% url 'blog:delete_post' post.id %}">
+            {% csrf_token %}
+            <button type="submit" class="delete-btn">Delete</button>
+          </form>
+        {% endif %}
       </div>
       <br>
 
       {% if post.comments %}
-        <!-- Форма для сортування коментарів -->
         <form method="get" class="filter-form">
           {{ form.sort_by.label_tag }} {{ form.sort_by }}
-          {{ form.order.label_tag }} {{ form.order }}
           <button type="submit">Sort</button>
         </form>
         <br>
-
         <div class="comments-container">
           {% for comment in post.comments.all %}
             <div class="comment">
               <div class="post-info">
-                <p class="user-name">
-                  {{ comment.user.username }}
-                </p>
-                <p class="date-info">
-                  {{ comment.formatted_date }}
-                </p>
+                <p class="user-name">{{ comment.user.username }}</p>
+                <p class="date-info">{{ comment.formatted_date }}</p>
               </div>
-              <p class="text-area">
-                {{ comment.text }}
-              </p>
+              <p class="text-area">{{ comment.text }}</p>
               <div>
                 <p class="comment-link">
-                  <a class="comment-link-btn" href="{% url "blog:add_reply" comment_id=comment.id %}">Reply</a>
+                  <a class="comment-link-btn" href="{% url "blog:add_reply" comment_id=comment.id %}">Comment</a>
                 </p>
+              
+                {% if request.user == comment.user %}
+                  <form method="post" action="{% url 'blog:delete_comment' comment.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                  </form>
+                {% endif %}
               </div>
             </div>
             <br>
+
             {% if comment.replies %}
               {% for reply in comment.replies.all %}
                 <div class="reply">
                   <div class="post-info">
-                    <p class="user-name">
-                      {{ reply.user.username }}
-                    </p>
-                    <p class="date-info">
-                      {{ reply.formatted_date }}
-                    </p>
+                    <p class="user-name">{{ reply.user.username }}</p>
+                    <p class="date-info">{{ reply.formatted_date }}</p>
                   </div>
-                  <p class="text-area">
-                    {{ reply.text }}
-                  </p>
+                  <p class="text-area">{{ reply.text }}</p>
+                
+                  {% if request.user == reply.user %}
+                    <form method="post" action="{% url 'blog:delete_reply' reply.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                  {% endif %}
                 </div>
                 <br>
               {% endfor %}
@@ -74,7 +75,6 @@
       {% endif %}
     {% endfor %}
   {% endif %}
-
   <div>
     <a href="{% url "blog:add_post" %}">Create post</a>
   </div>
