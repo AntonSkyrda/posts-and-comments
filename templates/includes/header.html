@@ -1,6 +1,9 @@
 <header>
   <nav class="header-container">
-    <a class="go-main" href="{% url "blog:index" %}">BLOG</a>
+    <div class="header-left">
+      <a class="go-main" href="{% url "blog:index" %}">BLOG</a>
+      <a href="{% url "blog:add_post" %}">Create post</a>
+    </div>
     <ul class="action">
       <li>
         <a href="{% url "blog:user_create" %}">

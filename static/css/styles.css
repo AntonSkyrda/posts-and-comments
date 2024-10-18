@@ -1,5 +1,7 @@
-body {
+html, body {
+    height: 100%;
     margin: 0;
+    padding: 0;
     background-color: #fafafa;
 }
 
@@ -12,6 +14,7 @@ a {
 }
 
 .container {
+    height: 100vh;
     padding: 20px;
     margin: auto;
     max-width: 1240px;
@@ -53,12 +56,12 @@ a {
 }
 
 .comment {
-    min-width: 950px;
+    max-width: 950px;
     border: 1px solid black;
 }
 
 .reply {
-    min-width: 900px;
+    max-width: 900px;
     border: 1px solid black;
 }
 
@@ -89,6 +92,11 @@ a {
 
 .go-main {
     padding-left: 200px;
+}
+
+.header-left {
+    display: flex;
+    gap: 50px;
 }
 
 .action {
@@ -122,4 +130,8 @@ a {
 .editing-group {
     display: flex;
     align-items: center;
+}
+
+.create-post {
+    text-align: center
 }

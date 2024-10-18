@@ -9,9 +9,9 @@
           <p class="date-info">{{ post.formatted_date }}</p>
         </div>
         <p class="text-area">{{ post.text }}</p>
+        <div class="edition">
+          {% if request.user == post.user %}
 
-        {% if request.user == post.user %}
-          <div class="edition">
             <div class="editing-group">
               <form method="post" action="{% url 'blog:delete_post' post.id %}">
                 {% csrf_token %}
@@ -21,11 +21,12 @@
                 <a href="{% url 'blog:edit_post' post.id %}">Edit</a>
               </p>
             </div>
-            <p class="add-message">
-              <a href="{% url "blog:add_comment" post_id=post.id %}">Comment</a>
-            </p>
-          </div>
-        {% endif %}
+          {% endif %}
+          <p class="add-message">
+            <a href="{% url "blog:add_comment" post_id=post.id %}">Comment</a>
+          </p>
+        </div>
+
       </div>
       <br>
 
@@ -44,9 +45,8 @@
               </div>
               <p class="text-area">{{ comment.text }}</p>
               <div>
-
-                {% if request.user == comment.user %}
-                  <div class="edition">
+                <div class="edition">
+                  {% if request.user == comment.user %}
                     <div class="editing-group">
                       <form method="post" action="{% url 'blog:delete_comment' comment.id %}">
                         {% csrf_token %}
@@ -56,11 +56,12 @@
                         <a href="{% url 'blog:edit_comment' comment.id %}">Edit</a>
                       </p>
                     </div>
-                    <p class="comment-link">
-                      <a class="comment-link-btn" href="{% url "blog:add_reply" comment_id=comment.id %}">Comment</a>
-                    </p>
-                  </div>
-                {% endif %}
+                  {% endif %}
+                  <p class="comment-link">
+                    <a class="comment-link-btn" href="{% url "blog:add_reply" comment_id=comment.id %}">Comment</a>
+                  </p>
+                </div>
+
               </div>
             </div>
             <br>
@@ -94,7 +95,4 @@
       {% endif %}
     {% endfor %}
   {% endif %}
-  <div>
-    <a href="{% url "blog:add_post" %}">Create post</a>
-  </div>
 {% endblock %}
