@@ -37,15 +37,14 @@ class Comment(CreateMessage):
         on_delete=models.CASCADE,
         related_name="comments",
     )
-    parent = models.ForeignKey(
-        "self",
+
+
+class Reply(CreateMessage):
+    comment = models.ForeignKey(
+        Comment,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
         related_name="replies",
     )
 
-    def save(self, *args, **kwargs):
-        if self.parent and not self.post:
-            self.post = self.parent.post
-        super().save(*args, **kwargs)
+    class Meta:
+        verbose_name_plural = "Replies"
