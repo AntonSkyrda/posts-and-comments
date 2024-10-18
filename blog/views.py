@@ -5,13 +5,16 @@ from django.db.models import Prefetch
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from .models import Post, BlogUser, Comment
+from .models import Post, BlogUser, Comment, Reply
 from .forms import (
     PostCreateForm,
     BlogUserCreateForm,
     CommentCreateForm,
     ReplyCreateForm,
     CommentsSortForm,
+    PostEditForm,
+    CommentEditForm,
+    ReplyEditForm,
 )
 
 
@@ -118,7 +121,7 @@ class BlogUserCreateView(CreateView):
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.user != post.user:
-        return HttpResponseForbidden("У вас немає прав для видалення цього поста.")
+        return HttpResponseForbidden("You do not have permission to delete this post.")
 
     if request.method == "POST":
         post.delete()
@@ -130,7 +133,9 @@ def delete_post(request, post_id):
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.user:
-        return HttpResponseForbidden("У вас немає прав для видалення цього коментаря.")
+        return HttpResponseForbidden(
+            "You do not have permission to delete this comment."
+        )
 
     if request.method == "POST":
         comment.delete()
@@ -140,11 +145,65 @@ def delete_comment(request, comment_id):
 
 @login_required
 def delete_reply(request, reply_id):
-    reply = get_object_or_404(Comment, id=reply_id)
+    reply = get_object_or_404(Reply, id=reply_id)
     if request.user != reply.user:
-        return HttpResponseForbidden("У вас немає прав для видалення цього коментаря.")
+        return HttpResponseForbidden("You do not have permission to delete this reply.")
 
     if request.method == "POST":
         reply.delete()
         return redirect("blog:index")
     return render(request, "blog/delete_comment.html", {"reply": reply})
+
+
+@login_required
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.user != post.user:
+        return redirect("blog:index")
+
+    if request.method == "POST":
+        form = PostEditForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect("blog:index")
+    else:
+        form = PostEditForm(instance=post)
+
+    return render(request, "blog/edit_post.html", {"form": form})
+
+
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.user != comment.user:
+        return redirect("blog:index")
+
+    if request.method == "POST":
+        form = CommentEditForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect("blog:index")
+    else:
+        form = CommentEditForm(instance=comment)
+
+    return render(request, "blog/edit_comment.html", {"form": form})
+
+
+@login_required
+def edit_reply(request, reply_id):
+    reply = get_object_or_404(Reply, id=reply_id)
+
+    if request.user != reply.user:
+        return redirect("blog:index")
+
+    if request.method == "POST":
+        form = ReplyEditForm(request.POST, instance=reply)
+        if form.is_valid():
+            form.save()
+            return redirect("blog:index")
+    else:
+        form = ReplyEditForm(instance=reply)
+
+    return render(request, "blog/edit_reply.html", {"form": form})

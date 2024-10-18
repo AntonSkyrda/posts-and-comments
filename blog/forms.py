@@ -65,3 +65,24 @@ class CommentsSortForm(forms.Form):
         required=False,
         label="Order",
     )
+
+
+class PostEditForm(forms.ModelForm):
+
+    class Meta:
+        model = Post
+        fields = ["text"]
+
+
+class CommentEditForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ["text"]
+
+
+class ReplyEditForm(forms.ModelForm):
+
+    class Meta:
+        model = Reply
+        fields = ["text"]

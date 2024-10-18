@@ -18,6 +18,9 @@
             {% csrf_token %}
             <button type="submit" class="delete-btn">Delete</button>
           </form>
+          {% if request.user == post.user %}
+            <a href="{% url 'blog:edit_post' post.id %}">Edit</a>
+          {% endif %}
         {% endif %}
       </div>
       <br>
@@ -40,12 +43,15 @@
                 <p class="comment-link">
                   <a class="comment-link-btn" href="{% url "blog:add_reply" comment_id=comment.id %}">Comment</a>
                 </p>
-              
+
                 {% if request.user == comment.user %}
                   <form method="post" action="{% url 'blog:delete_comment' comment.id %}">
                     {% csrf_token %}
                     <button type="submit" class="delete-btn">Delete</button>
                   </form>
+                  {% if request.user == comment.user %}
+                    <a href="{% url 'blog:edit_post' comment.id %}">Edit</a>
+                  {% endif %}
                 {% endif %}
               </div>
             </div>
@@ -59,12 +65,15 @@
                     <p class="date-info">{{ reply.formatted_date }}</p>
                   </div>
                   <p class="text-area">{{ reply.text }}</p>
-                
+
                   {% if request.user == reply.user %}
                     <form method="post" action="{% url 'blog:delete_reply' reply.id %}">
                       {% csrf_token %}
                       <button type="submit" class="delete-btn">Delete</button>
                     </form>
+                    {% if request.user == reply.user %}
+                      <a href="{% url 'blog:edit_post' reply %}">Edit</a>
+                    {% endif %}
                   {% endif %}
                 </div>
                 <br>
