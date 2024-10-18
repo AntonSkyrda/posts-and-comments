@@ -1,27 +1,37 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Prefetch
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
 from .models import Post, BlogUser, Comment
 from .forms import (
-    MessageCreateForm,
+    PostCreateForm,
     BlogUserCreateForm,
     CommentCreateForm,
-    PostSortForm,
+    ReplyCreateForm,
+    CommentsSortForm,
 )
 
 
 def index(request):
-    form = PostSortForm(request.GET)
-    sort_by = form.cleaned_data["sort_by"] if form.is_valid() else "created_at"
+    sort_by = request.GET.get("sort_by", "created_at")
+    order = request.GET.get("order", "asc")
 
-    if sort_by == "username":
-        posts = Post.objects.select_related("user").order_by("user__username")
-    elif sort_by == "email":
-        posts = Post.objects.select_related("user").order_by("user__email")
-    else:
-        posts = Post.objects.order_by("created_at")
+    sort_order = "" if order == "asc" else "-"
+
+    comments_prefetch = Prefetch(
+        "comments",
+        queryset=Comment.objects.select_related("user").order_by(
+            f"{sort_order}{sort_by}"
+        ),
+    )
+
+    posts = (
+        Post.objects.all().select_related("user").prefetch_related(comments_prefetch)
+    )
+
+    form = CommentsSortForm(request.GET or None)
 
     context = {
         "posts": posts,
@@ -34,7 +44,7 @@ def index(request):
 @login_required
 def add_post(request):
     if request.method == "POST":
-        form = MessageCreateForm(request.POST)
+        form = PostCreateForm(request.POST)
         if form.is_valid():
             user_name = form.cleaned_data.get("username")
             user_email = form.cleaned_data.get("email")
@@ -47,7 +57,7 @@ def add_post(request):
                 post.save()
                 return redirect("blog:index")
     else:
-        form = MessageCreateForm()
+        form = PostCreateForm()
 
     return render(request, "blog/create_post.html", {"form": form})
 
@@ -55,10 +65,6 @@ def add_post(request):
 @login_required
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    parent_comment = None
-
-    if "parent_id" in request.POST:
-        parent_comment = get_object_or_404(Comment, id=request.POST.get("parent_id"))
 
     if request.method == "POST":
         form = CommentCreateForm(request.POST)
@@ -66,14 +72,38 @@ def add_comment(request, post_id):
             comment = form.save(commit=False)
             comment.user = request.user
             comment.post = post
-            if parent_comment:
-                comment.parent = parent_comment
             comment.save()
             return redirect("blog:index")
     else:
         form = CommentCreateForm()
 
-    return render(request, "blog/create_comment.html", {"form": form, "post": post})
+    return render(
+        request,
+        "blog/create_comment.html",
+        {"form": form, "post": post},
+    )
+
+
+@login_required
+def add_reply(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.method == "POST":
+        form = ReplyCreateForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.user = request.user
+            reply.comment = comment
+            reply.save()
+            return redirect("blog:index")
+    else:
+        form = CommentCreateForm()
+
+    return render(
+        request,
+        "blog/create_reply.html",
+        {"form": form, "comment": comment},
+    )
 
 
 class BlogUserCreateView(CreateView):
