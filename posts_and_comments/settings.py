@@ -81,18 +81,18 @@ WSGI_APPLICATION = "posts_and_comments.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.sqlite3",
-    #     "NAME": BASE_DIR / "db.sqlite3",
-    # }
     "default": {
-        "ENGINE": os.environ.get("ENGINE"),
-        "NAME": os.environ.get("NAME"),
-        "USER": os.environ.get("USER"),
-        "PASSWORD": os.environ.get("PASSWORD"),
-        "HOST": os.environ.get("HOST"),
-        "PORT": os.environ.get("PORT"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+    # "default": {
+    #     "ENGINE": os.environ.get("ENGINE"),
+    #     "NAME": os.environ.get("NAME"),
+    #     "USER": os.environ.get("USER"),
+    #     "PASSWORD": os.environ.get("PASSWORD"),
+    #     "HOST": os.environ.get("HOST"),
+    #     "PORT": os.environ.get("PORT"),
+    # }
 }
 
 
@@ -144,3 +144,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "blog.BlogUser"
 
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
