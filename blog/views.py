@@ -16,6 +16,7 @@ from .forms import (
     CommentEditForm,
     ReplyEditForm,
 )
+from .utils import clean_and_validate_html
 
 
 def index(request):
@@ -56,10 +57,19 @@ def add_post(request):
             if user_name != request.user.username or user_email != request.user.email:
                 form.add_error(None, "Name or email doesn't match with your account.")
             else:
-                post = form.save(commit=False)
-                post.user = request.user
-                post.save()
-                return redirect("blog:index")
+                post_text = form.cleaned_data.get("text")
+
+                if post_text:
+                    cleaned_text = clean_and_validate_html(post_text)
+                    if cleaned_text:
+                        post = form.save(commit=False)
+                        post.user = request.user
+                        post.text = cleaned_text
+                        return redirect("blog:index")
+                    else:
+                        form.add_error(None, "Your content contains invalid HTML tags.")
+                else:
+                    form.add_error("text", "Content cannot be empty.")
     else:
         form = PostCreateForm()
 
@@ -73,11 +83,17 @@ def add_comment(request, post_id):
     if request.method == "POST":
         form = CommentCreateForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.post = post
-            comment.save()
-            return redirect("blog:index")
+            comment_text = form.cleaned_data.get("text")
+            cleaned_text = clean_and_validate_html(comment_text)
+            if cleaned_text:
+                comment = form.save(commit=False)
+                comment.user = request.user
+                comment.post = post
+                comment.text = cleaned_text
+                comment.save()
+                return redirect("blog:index")
+            else:
+                form.add_error(None, "Your comment contains invalid HTML tags.")
     else:
         form = CommentCreateForm()
 
@@ -95,13 +111,19 @@ def add_reply(request, comment_id):
     if request.method == "POST":
         form = ReplyCreateForm(request.POST)
         if form.is_valid():
-            reply = form.save(commit=False)
-            reply.user = request.user
-            reply.comment = comment
-            reply.save()
-            return redirect("blog:index")
+            reply_text = form.cleaned_data.get("text")
+            cleaned_text = clean_and_validate_html(reply_text)
+            if cleaned_text:
+                reply = form.save(commit=False)
+                reply.user = request.user
+                reply.comment = comment
+                reply.text = cleaned_text
+                reply.save()
+                return redirect("blog:index")
+            else:
+                form.add_error(None, "Your reply contains invalid HTML tags.")
     else:
-        form = CommentCreateForm()
+        form = ReplyCreateForm()
 
     return render(
         request,
@@ -165,8 +187,14 @@ def edit_post(request, post_id):
     if request.method == "POST":
         form = PostEditForm(request.POST, instance=post)
         if form.is_valid():
-            form.save()
-            return redirect("blog:index")
+            post_text = form.cleaned_data.get("text")
+            cleaned_text = clean_and_validate_html(post_text)
+            if cleaned_text:
+                post.text = cleaned_text
+                form.save()
+                return redirect("blog:index")
+            else:
+                form.add_error(None, "Your content contains invalid HTML tags.")
     else:
         form = PostEditForm(instance=post)
 
@@ -183,8 +211,14 @@ def edit_comment(request, comment_id):
     if request.method == "POST":
         form = CommentEditForm(request.POST, instance=comment)
         if form.is_valid():
-            form.save()
-            return redirect("blog:index")
+            comment_text = form.cleaned_data.get("text")
+            cleaned_text = clean_and_validate_html(comment_text)
+            if cleaned_text:
+                comment.text = cleaned_text
+                form.save()
+                return redirect("blog:index")
+            else:
+                form.add_error(None, "Your comment contains invalid HTML tags.")
     else:
         form = CommentEditForm(instance=comment)
 
@@ -201,8 +235,14 @@ def edit_reply(request, reply_id):
     if request.method == "POST":
         form = ReplyEditForm(request.POST, instance=reply)
         if form.is_valid():
-            form.save()
-            return redirect("blog:index")
+            reply_text = form.cleaned_data.get("text")
+            cleaned_text = clean_and_validate_html(reply_text)
+            if cleaned_text:
+                reply.text = cleaned_text
+                form.save()
+                return redirect("blog:index")
+            else:
+                form.add_error(None, "Your reply contains invalid HTML tags.")
     else:
         form = ReplyEditForm(instance=reply)
 

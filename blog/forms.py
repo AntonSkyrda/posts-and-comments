@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import Post, BlogUser, Comment, Reply
 
+from ckeditor.fields import RichTextField
+
 SORT_CHOICES = [
     ("username", "Username"),
     ("email", "Email"),
@@ -31,9 +33,7 @@ class PostCreateForm(forms.ModelForm):
     email = forms.EmailField(label="Email")
     captcha = CaptchaField(label="Captcha", help_text="Enter the captcha")
 
-    text = forms.CharField(
-        label="Post's text",
-    )
+    text = RichTextField()
 
     class Meta:
         model = Post
@@ -41,6 +41,7 @@ class PostCreateForm(forms.ModelForm):
 
 
 class CommentCreateForm(forms.ModelForm):
+    text = RichTextField()
 
     class Meta:
         model = Comment
@@ -48,6 +49,7 @@ class CommentCreateForm(forms.ModelForm):
 
 
 class ReplyCreateForm(forms.ModelForm):
+    text = RichTextField()
 
     class Meta:
         model = Reply
@@ -68,6 +70,7 @@ class CommentsSortForm(forms.Form):
 
 
 class PostEditForm(forms.ModelForm):
+    text = RichTextField()
 
     class Meta:
         model = Post
@@ -75,6 +78,7 @@ class PostEditForm(forms.ModelForm):
 
 
 class CommentEditForm(forms.ModelForm):
+    text = RichTextField()
 
     class Meta:
         model = Comment
@@ -82,6 +86,7 @@ class CommentEditForm(forms.ModelForm):
 
 
 class ReplyEditForm(forms.ModelForm):
+    text = RichTextField()
 
     class Meta:
         model = Reply
