@@ -44,7 +44,6 @@ a {
 .message {
     margin: auto;
     max-width: 1000px;
-    border: 1px solid black;
 }
 
 .comments-container {
@@ -57,12 +56,10 @@ a {
 
 .comment {
     max-width: 950px;
-    border: 1px solid black;
 }
 
 .reply {
     max-width: 900px;
-    border: 1px solid black;
 }
 
 .text-area {

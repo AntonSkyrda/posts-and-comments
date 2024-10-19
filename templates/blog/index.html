@@ -43,7 +43,7 @@
                 <p class="user-name">{{ comment.user.username }}</p>
                 <p class="date-info">{{ comment.formatted_date }}</p>
               </div>
-              <p class="text-area">{{ comment.text }}</p>
+              <p class="text-area">{{ comment.text|safe }}</p>
               <div>
                 <div class="edition">
                   {% if request.user == comment.user %}
@@ -73,7 +73,7 @@
                     <p class="user-name">{{ reply.user.username }}</p>
                     <p class="date-info">{{ reply.formatted_date }}</p>
                   </div>
-                  <p class="text-area">{{ reply.text }}</p>
+                  <p class="text-area">{{ reply.text|safe }}</p>
 
                   {% if request.user == reply.user %}
                     <div class="editing-group">
