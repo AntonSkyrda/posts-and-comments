@@ -117,20 +117,6 @@ Pillow = ">=6.2.0"
 test = ["testfixtures"]
 
 [[package]]
-name = "django-tinymce"
-version = "4.1.0"
-description = "A Django application that contains a widget to render a"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "django_tinymce-4.1.0-py3-none-any.whl", hash = "sha256:9804836e6d2b08de3b03a27c100f8c2e9633549913eff8b323678a10cd48b94e"},
-    {file = "django_tinymce-4.1.0.tar.gz", hash = "sha256:02e3b70e940fd299f0fbef4315aee5c185664e1eb8cd396b176963954e4357c9"},
-]
-
-[package.dependencies]
-django = ">=3.2"
-
-[[package]]
 name = "lxml"
 version = "5.3.0"
 description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
@@ -519,7 +505,21 @@ files = [
     {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
 ]
 
+[[package]]
+name = "whitenoise"
+version = "6.7.0"
+description = "Radically simplified static file serving for WSGI applications"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "whitenoise-6.7.0-py3-none-any.whl", hash = "sha256:a1ae85e01fdc9815d12fa33f17765bc132ed2c54fa76daf9e39e879dd93566f6"},
+    {file = "whitenoise-6.7.0.tar.gz", hash = "sha256:58c7a6cd811e275a6c91af22e96e87da0b1109e9a53bb7464116ef4c963bf636"},
+]
+
+[package.extras]
+brotli = ["brotli"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5ef504daca19852ad9dc0aecbed141d12f1a050969338dffdeb66b8cc3e07ada"
+content-hash = "881bf255dbd5781c14513d9bcd3cb0f7fa17cc31c922edbe1aae59887e3b277f"
