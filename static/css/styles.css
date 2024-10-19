@@ -1,0 +1,134 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    height: 100vh;
+    padding: 20px;
+    margin: auto;
+    max-width: 1240px;
+    background-color: white;
+}
+
+.post-info {
+    margin: auto;
+    justify-content: space-between;
+    background-color: #6f94c6;
+    padding: 10px;
+    max-width: 1000px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-name {
+    margin: 0;
+}
+
+.date-info {
+    margin: 0;
+    text-align: right;
+}
+
+.message {
+    margin: auto;
+    max-width: 1000px;
+}
+
+.comments-container {
+    margin: auto;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.comment {
+    max-width: 950px;
+}
+
+.reply {
+    max-width: 900px;
+}
+
+.text-area {
+    margin: 20px;
+}
+
+.comment-btn {
+    margin: auto;
+}
+
+.filter-form {
+    text-align: center;
+}
+
+.comment-link{
+    text-align: end;
+    padding-right: 20px;
+}
+
+.header-container {
+    height: 80px;
+    background-color: #4ac1f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.go-main {
+    padding-left: 200px;
+}
+
+.header-left {
+    display: flex;
+    gap: 50px;
+}
+
+.action {
+    display: flex;
+    gap: 50px;
+    list-style: none;
+    padding-right: 200px;
+}
+
+.footer-container {
+    height: 80px;
+    background-color: #4ac1f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.delete-btn {
+    margin: 20px;
+    background-color: red;
+}
+
+.edition {
+    margin: auto;
+    justify-content: space-between;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.editing-group {
+    display: flex;
+    align-items: center;
+}
+
+.create-post {
+    text-align: center
+}

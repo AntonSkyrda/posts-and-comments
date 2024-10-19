@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if posts %}
+    {% for post in posts %}
+      <div class="message">
+        <div class="post-info">
+          <p class="user-name">{{ post.user.username }}</p>
+          <p class="date-info">{{ post.formatted_date }}</p>
+        </div>
+        <p class="text-area">{{ post.text|safe }}</p>
+        <div class="edition">
+          {% if request.user == post.user %}
+
+            <div class="editing-group">
+              <form method="post" action="{% url 'blog:delete_post' post.id %}">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Delete</button>
+              </form>
+              <p>
+                <a href="{% url 'blog:edit_post' post.id %}">Edit</a>
+              </p>
+            </div>
+          {% endif %}
+          <p class="add-message">
+            <a href="{% url "blog:add_comment" post_id=post.id %}">Comment</a>
+          </p>
+        </div>
+
+      </div>
+      <br>
+
+      {% if post.comments %}
+        <form method="get" class="filter-form">
+          {{ form.sort_by.label_tag }} {{ form.sort_by }}
+          <button type="submit">Sort</button>
+        </form>
+        <br>
+        <div class="comments-container">
+          {% for comment in post.comments.all %}
+            <div class="comment">
+              <div class="post-info">
+                <p class="user-name">{{ comment.user.username }}</p>
+                <p class="date-info">{{ comment.formatted_date }}</p>
+              </div>
+              <p class="text-area">{{ comment.text|safe }}</p>
+              <div>
+                <div class="edition">
+                  {% if request.user == comment.user %}
+                    <div class="editing-group">
+                      <form method="post" action="{% url 'blog:delete_comment' comment.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn">Delete</button>
+                      </form>
+                      <p>
+                        <a href="{% url 'blog:edit_comment' comment.id %}">Edit</a>
+                      </p>
+                    </div>
+                  {% endif %}
+                  <p class="comment-link">
+                    <a class="comment-link-btn" href="{% url "blog:add_reply" comment_id=comment.id %}">Comment</a>
+                  </p>
+                </div>
+
+              </div>
+            </div>
+            <br>
+
+            {% if comment.replies %}
+              {% for reply in comment.replies.all %}
+                <div class="reply">
+                  <div class="post-info">
+                    <p class="user-name">{{ reply.user.username }}</p>
+                    <p class="date-info">{{ reply.formatted_date }}</p>
+                  </div>
+                  <p class="text-area">{{ reply.text|safe }}</p>
+
+                  {% if request.user == reply.user %}
+                    <div class="editing-group">
+                      <form method="post" action="{% url 'blog:delete_reply' reply.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn">Delete</button>
+                      </form>
+                      <p>
+                        <a href="{% url 'blog:edit_reply' reply.id %}">Edit</a>
+                      </p>
+                    </div>
+                  {% endif %}
+                </div>
+                <br>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endblock %}

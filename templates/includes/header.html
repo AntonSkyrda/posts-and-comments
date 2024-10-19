@@ -1,0 +1,36 @@
+<header>
+  <nav class="header-container">
+    <div class="header-left">
+      <a class="go-main" href="{% url "blog:index" %}">BLOG</a>
+      <a href="{% url "blog:add_post" %}">Create post</a>
+    </div>
+    <ul class="action">
+      <li>
+        <a href="{% url "blog:user_create" %}">
+          <p>Sign UP</p>
+        </a>
+      </li>
+      {% if user.is_authenticated %}
+        <li>
+          <a href="">
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <p>
+                <button type="submit" class="logout-button">Log OUT</button>
+              </p>
+            </form>
+          </a>
+        </li>
+        <li>
+          <p>User: {{ user.get_username }}</p>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url 'login' %}?next={{ request.path }}">
+            <p>Log IN</p>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
