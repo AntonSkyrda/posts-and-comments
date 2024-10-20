@@ -4,7 +4,7 @@ Django project for work with posts, comments and replies
 
 ## Check it out!
 
-[Blog project deployed to Render](https://kitchen-restaurant-service.render.com/)
+[Blog project deployed to Render](https://posts-and-comments.onrender.com/)
 
 ## Installation
 
