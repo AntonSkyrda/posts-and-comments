@@ -59,11 +59,12 @@ a {
 }
 
 .comment {
-    max-width: 950px;
+    min-width: 950px;
 }
 
 .reply {
-    max-width: 900px;
+    min-width: 900px;
+
 }
 
 .text-area {
