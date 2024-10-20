@@ -68,6 +68,24 @@ Django = ">=3.2"
 django-js-asset = ">=2.0"
 
 [[package]]
+name = "django-ckeditor-5"
+version = "0.2.15"
+description = "CKEditor 5 for Django."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_ckeditor_5-0.2.15-py3-none-any.whl", hash = "sha256:71980998d4bef7b272e50cb6878cca5c0bedec42b389a3827ffe1bbb88babd29"},
+    {file = "django_ckeditor_5-0.2.15.tar.gz", hash = "sha256:587f0485a3dca6a1a7c7c68e4160770e46389b8cf50205bf352bd47fcb63567c"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+Pillow = "*"
+
+[package.extras]
+dev = ["bandit[toml] (==1.7.6)", "black (==22.12.0)", "codespell (==2.2.2)", "coverage (==7.4.0)", "mypy (==1.8.0)", "mypy-extensions (==1.0.0)", "pytest (==7.4.4)", "pytest-cov (==4.0.0)", "pytest-django (==4.5.2)", "pytest-mock (==3.10.0)", "safety (==2.3.5)", "types-setuptools (==65.6.0.2)", "typing-extensions (==4.9.0)"]
+
+[[package]]
 name = "django-js-asset"
 version = "2.2.0"
 description = "script tag with additional attributes for django.forms.Media"
@@ -554,4 +572,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "817f02988eee6ba35006a21b07661fb7c402c022fbb0ca7e078e549081e5e3eb"
+content-hash = "4451b968f8e0e7b11d3d7267d319dd2dee548c60f0f481ba4a43de37f36c4153"

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import Post, BlogUser, Comment, Reply
 
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.widgets import CKEditor5Widget
 
 SORT_CHOICES = [
     ("username", "Username"),
@@ -33,27 +33,37 @@ class PostCreateForm(forms.ModelForm):
     email = forms.EmailField(label="Email")
     captcha = CaptchaField(label="Captcha", help_text="Enter the captcha")
 
-    text = RichTextField()
-
     class Meta:
         model = Post
         fields = ["text"]
+        widgets = {
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }
 
 
 class CommentCreateForm(forms.ModelForm):
-    text = RichTextField()
 
     class Meta:
         model = Comment
         fields = ["text"]
+        widgets = {
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }
 
 
 class ReplyCreateForm(forms.ModelForm):
-    text = RichTextField()
-
     class Meta:
         model = Reply
         fields = ["text"]
+        widgets = {
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }
 
 
 class CommentsSortForm(forms.Form):
@@ -70,24 +80,36 @@ class CommentsSortForm(forms.Form):
 
 
 class PostEditForm(forms.ModelForm):
-    text = RichTextField()
 
     class Meta:
         model = Post
         fields = ["text"]
+        widgets = {
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }
 
 
 class CommentEditForm(forms.ModelForm):
-    text = RichTextField()
 
     class Meta:
         model = Comment
         fields = ["text"]
+        widgets = {
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }
 
 
 class ReplyEditForm(forms.ModelForm):
-    text = RichTextField()
 
     class Meta:
         model = Reply
         fields = ["text"]
+        widgets = {
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }

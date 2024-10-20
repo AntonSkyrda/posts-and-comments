@@ -30,8 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blog",
     "captcha",
-    "ckeditor",
-    "ckeditor_uploader",
+    "django_ckeditor_5",
 ]
 
 MIDDLEWARE = [
@@ -115,16 +114,30 @@ LOGOUT_REDIRECT_URL = "/"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
-CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": "Custom",
-        "toolbar_Custom": [
-            {
-                "name": "basicstyles",
-                "items": ["Bold", "Italic", "Underline", "RemoveFormat"],
-            },
-            {"name": "links", "items": ["Link", "Unlink"]},
+CKEDITOR_5_CONFIGS = {
+    "comment": {
+        "toolbar": [
+            "bold",
+            "italic",
+            "underline",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
         ],
-        "allowedContent": "a[!href,title]; strong; em; code;",  # Разрешенные теги
-    },
+        "htmlSupport": {
+            "allow": [
+                {"name": "a", "attributes": {"href": True, "title": True}},
+                {
+                    "name": "i",
+                },
+                {
+                    "name": "strong",
+                },
+                {
+                    "name": "code",
+                },
+            ]
+        },
+    }
 }
