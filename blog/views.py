@@ -65,6 +65,7 @@ def add_post(request):
                         post = form.save(commit=False)
                         post.user = request.user
                         post.text = cleaned_text
+                        post.save()
                         return redirect("blog:index")
                     else:
                         form.add_error(None, "Your content contains invalid HTML tags.")
