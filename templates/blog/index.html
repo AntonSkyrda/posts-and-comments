@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <form method="get" class="filter-form">
+      {{ form.sort_by.label_tag }} {{ form.sort_by }}
+      <button type="submit">Sort</button>
+    </form>
   {% if posts %}
     {% for post in posts %}
       <div class="message">
@@ -31,10 +35,6 @@
       <br>
 
       {% if post.comments %}
-        <form method="get" class="filter-form">
-          {{ form.sort_by.label_tag }} {{ form.sort_by }}
-          <button type="submit">Sort</button>
-        </form>
         <br>
         <div class="comments-container">
           {% for comment in post.comments.all %}

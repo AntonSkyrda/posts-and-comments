@@ -9,9 +9,17 @@ env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = os.environ.get("DJANGO_DEBUG")
+DEBUG = "RENDER" not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "https://posts-and-comments.onrender.com",
+]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -22,12 +30,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blog",
     "captcha",
-    "ckeditor",
-    "ckeditor_uploader",
+    "django_ckeditor_5",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -106,16 +114,30 @@ LOGOUT_REDIRECT_URL = "/"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
-CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": "Custom",
-        "toolbar_Custom": [
-            {
-                "name": "basicstyles",
-                "items": ["Bold", "Italic", "Underline", "RemoveFormat"],
-            },
-            {"name": "links", "items": ["Link", "Unlink"]},
+CKEDITOR_5_CONFIGS = {
+    "comment": {
+        "toolbar": [
+            "bold",
+            "italic",
+            "underline",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
         ],
-        "allowedContent": "a[!href,title]; strong; em; code;",  # Разрешенные теги
-    },
+        "htmlSupport": {
+            "allow": [
+                {"name": "a", "attributes": {"href": True, "title": True}},
+                {
+                    "name": "i",
+                },
+                {
+                    "name": "strong",
+                },
+                {
+                    "name": "code",
+                },
+            ]
+        },
+    }
 }

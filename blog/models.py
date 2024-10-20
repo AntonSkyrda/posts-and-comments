@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class BlogUser(AbstractUser):
@@ -15,7 +15,7 @@ class CreateMessage(models.Model):
         on_delete=models.CASCADE,
         related_name="%(class)s_messages",
     )
-    text = RichTextField()
+    text = CKEditor5Field(config_name="extends")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def formatted_date(self):
