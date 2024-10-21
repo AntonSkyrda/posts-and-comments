@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Prefetch
@@ -9,12 +10,10 @@ from .models import Post, BlogUser, Comment, Reply
 from .forms import (
     PostCreateForm,
     BlogUserCreateForm,
-    CommentCreateForm,
-    ReplyCreateForm,
+    CommentForm,
+    ReplyForm,
     CommentsSortForm,
     PostEditForm,
-    CommentEditForm,
-    ReplyEditForm,
 )
 from .utils import clean_and_validate_html
 
@@ -25,21 +24,33 @@ def index(request):
 
     sort_order = "" if order == "asc" else "-"
 
+    if sort_by == "username":
+        sort_by = "user__username"
+    elif sort_by == "email":
+        sort_by = "user__email"
+    else:
+        sort_by = "created_at"
+
     comments_prefetch = Prefetch(
         "comments",
-        queryset=Comment.objects.select_related("user").order_by(
-            f"{sort_order}{sort_by}"
-        ),
+        queryset=Comment.objects.select_related("user").prefetch_related("replies"),
     )
 
     posts = (
-        Post.objects.all().select_related("user").prefetch_related(comments_prefetch)
+        Post.objects.all()
+        .select_related("user")
+        .prefetch_related(comments_prefetch)
+        .order_by(f"{sort_order}{sort_by}")
     )
+
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     form = CommentsSortForm(request.GET or None)
 
     context = {
-        "posts": posts,
+        "page_obj": page_obj,
         "form": form,
     }
 
@@ -82,7 +93,7 @@ def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     if request.method == "POST":
-        form = CommentCreateForm(request.POST)
+        form = CommentForm(request.POST)
         if form.is_valid():
             comment_text = form.cleaned_data.get("text")
             cleaned_text = clean_and_validate_html(comment_text)
@@ -96,7 +107,7 @@ def add_comment(request, post_id):
             else:
                 form.add_error(None, "Your comment contains invalid HTML tags.")
     else:
-        form = CommentCreateForm()
+        form = CommentForm()
 
     return render(
         request,
@@ -110,7 +121,7 @@ def add_reply(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
     if request.method == "POST":
-        form = ReplyCreateForm(request.POST)
+        form = ReplyForm(request.POST)
         if form.is_valid():
             reply_text = form.cleaned_data.get("text")
             cleaned_text = clean_and_validate_html(reply_text)
@@ -124,7 +135,7 @@ def add_reply(request, comment_id):
             else:
                 form.add_error(None, "Your reply contains invalid HTML tags.")
     else:
-        form = ReplyCreateForm()
+        form = ReplyForm()
 
     return render(
         request,
@@ -175,7 +186,7 @@ def delete_reply(request, reply_id):
     if request.method == "POST":
         reply.delete()
         return redirect("blog:index")
-    return render(request, "blog/delete_comment.html", {"reply": reply})
+    return render(request, "blog/delete_reply.html", {"reply": reply})
 
 
 @login_required
@@ -210,7 +221,7 @@ def edit_comment(request, comment_id):
         return redirect("blog:index")
 
     if request.method == "POST":
-        form = CommentEditForm(request.POST, instance=comment)
+        form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             comment_text = form.cleaned_data.get("text")
             cleaned_text = clean_and_validate_html(comment_text)
@@ -221,7 +232,7 @@ def edit_comment(request, comment_id):
             else:
                 form.add_error(None, "Your comment contains invalid HTML tags.")
     else:
-        form = CommentEditForm(instance=comment)
+        form = CommentForm(instance=comment)
 
     return render(request, "blog/edit_comment.html", {"form": form})
 
@@ -234,7 +245,7 @@ def edit_reply(request, reply_id):
         return redirect("blog:index")
 
     if request.method == "POST":
-        form = ReplyEditForm(request.POST, instance=reply)
+        form = ReplyForm(request.POST, instance=reply)
         if form.is_valid():
             reply_text = form.cleaned_data.get("text")
             cleaned_text = clean_and_validate_html(reply_text)
@@ -245,6 +256,6 @@ def edit_reply(request, reply_id):
             else:
                 form.add_error(None, "Your reply contains invalid HTML tags.")
     else:
-        form = ReplyEditForm(instance=reply)
+        form = ReplyForm(instance=reply)
 
     return render(request, "blog/edit_reply.html", {"form": form})
