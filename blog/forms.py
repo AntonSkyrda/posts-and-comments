@@ -43,7 +43,7 @@ class PostCreateForm(forms.ModelForm):
         }
 
 
-class CommentCreateForm(forms.ModelForm):
+class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
@@ -55,7 +55,7 @@ class CommentCreateForm(forms.ModelForm):
         }
 
 
-class ReplyCreateForm(forms.ModelForm):
+class ReplyForm(forms.ModelForm):
     class Meta:
         model = Reply
         fields = ["text"]
@@ -83,30 +83,6 @@ class PostEditForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["text"]
-        widgets = {
-            "text": CKEditor5Widget(
-                attrs={"class": "django_ckeditor_5"}, config_name="comment"
-            )
-        }
-
-
-class CommentEditForm(forms.ModelForm):
-
-    class Meta:
-        model = Comment
-        fields = ["text"]
-        widgets = {
-            "text": CKEditor5Widget(
-                attrs={"class": "django_ckeditor_5"}, config_name="comment"
-            )
-        }
-
-
-class ReplyEditForm(forms.ModelForm):
-
-    class Meta:
-        model = Reply
         fields = ["text"]
         widgets = {
             "text": CKEditor5Widget(

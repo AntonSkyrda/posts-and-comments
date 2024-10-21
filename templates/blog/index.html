@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form method="get" class="filter-form">
-      {{ form.sort_by.label_tag }} {{ form.sort_by }}
-      <button type="submit">Sort</button>
-    </form>
-  {% if posts %}
-    {% for post in posts %}
+  <form method="get" class="filter-form">
+    <label for="sort_by">{{ form.sort_by.label }}</label>
+    {{ form.sort_by }}
+
+    <label for="order">{{ form.order.label }}</label>
+    {{ form.order }}
+
+    <button type="submit">Sort</button>
+  </form>
+  {% if page_obj %}
+    {% for post in page_obj %}
       <div class="message">
         <div class="post-info">
           <p class="user-name">{{ post.user.username }}</p>
@@ -94,5 +99,22 @@
         </div>
       {% endif %}
     {% endfor %}
+    <div class="pagination">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+      </span>
+    </div>
   {% endif %}
 {% endblock %}
