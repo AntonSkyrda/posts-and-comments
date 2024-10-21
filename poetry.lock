@@ -68,6 +68,24 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-ckeditor-5"
+version = "0.2.15"
+description = "CKEditor 5 for Django."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django_ckeditor_5-0.2.15-py3-none-any.whl", hash = "sha256:71980998d4bef7b272e50cb6878cca5c0bedec42b389a3827ffe1bbb88babd29"},
+    {file = "django_ckeditor_5-0.2.15.tar.gz", hash = "sha256:587f0485a3dca6a1a7c7c68e4160770e46389b8cf50205bf352bd47fcb63567c"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+Pillow = "*"
+
+[package.extras]
+dev = ["bandit[toml] (==1.7.6)", "black (==22.12.0)", "codespell (==2.2.2)", "coverage (==7.4.0)", "mypy (==1.8.0)", "mypy-extensions (==1.0.0)", "pytest (==7.4.4)", "pytest-cov (==4.0.0)", "pytest-django (==4.5.2)", "pytest-mock (==3.10.0)", "safety (==2.3.5)", "types-setuptools (==65.6.0.2)", "typing-extensions (==4.9.0)"]
+
+[[package]]
 name = "django-ranged-response"
 version = "0.2.0"
 description = "Modified Django FileResponse that adds Content-Range headers."
@@ -543,4 +561,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ed79f58318381149192faac0c19b019ab42daa6c4e26447d32d0151734bba981"
+content-hash = "7d765bd862343cde01395a1c66922d6acac950913575c54da1f8df4801007f2a"
